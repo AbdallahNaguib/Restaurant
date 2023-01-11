@@ -22,6 +22,6 @@ public class Reservation {
     // the reservation times will be saved as long values
     private Long startTime, endTime;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     private DinnerTable table;
 }

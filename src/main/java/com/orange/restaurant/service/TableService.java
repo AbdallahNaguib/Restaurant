@@ -2,7 +2,8 @@ package com.orange.restaurant.service;
 
 import com.orange.restaurant.model.DinnerTable;
 import com.orange.restaurant.model.Reservation;
-import com.orange.restaurant.model.dto.DinnerTableDTO;
+import com.orange.restaurant.model.dto.DinnerTableRequestDTO;
+import com.orange.restaurant.model.dto.TableResponseDTO;
 import com.orange.restaurant.model.dto.TimeRange;
 import com.orange.restaurant.repository.TableRepository;
 import com.orange.restaurant.service.interfaces.ITableService;
@@ -17,7 +18,7 @@ public class TableService implements ITableService {
     private final TableRepository tableRepository;
 
     @Override
-    public DinnerTable save(DinnerTableDTO request) {
+    public DinnerTable save(DinnerTableRequestDTO request) {
         DinnerTable table = DinnerTable.builder()
                 .maxPersons(request.getMaxPersons())
                 .tableName(request.getName())
@@ -26,19 +27,21 @@ public class TableService implements ITableService {
     }
 
     @Override
-    public List<DinnerTable> getAvailableTables(TimeRange timeRange) {
+    public List<TableResponseDTO> getAvailableTables(TimeRange timeRange) {
         List<DinnerTable> allTables = tableRepository.findAll();
-        return allTables.stream().filter(table -> checkIfAvailable(table,timeRange)).toList();
+        return allTables.stream().filter(table -> checkIfAvailable(table,timeRange))
+                .map(TableResponseDTO::mapFromEntity).toList();
     }
 
     @Override
-    public List<DinnerTable> getAllTables() {
-        return tableRepository.findAll();
+    public List<TableResponseDTO> getAllTables() {
+        return tableRepository.findAll().stream().map(TableResponseDTO::mapFromEntity).toList();
     }
 
     // checks if the table is available at the that time frame
     @Override
     public boolean checkIfAvailable(DinnerTable table, TimeRange timeRange) {
+        if(table.getReservations() == null)return true;
         for (Reservation reservation : table.getReservations()) {
             boolean requestIsBeforeCurrentReservation = timeRange.getEndTime() <= reservation.getStartTime();
             boolean requestIsAfterCurrentReservation = timeRange.getStartTime() >= reservation.getEndTime();

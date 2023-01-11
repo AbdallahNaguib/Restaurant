@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class DinnerTableDTO {
+public class DinnerTableRequestDTO {
     @Positive
     private short maxPersons;
     private String name;

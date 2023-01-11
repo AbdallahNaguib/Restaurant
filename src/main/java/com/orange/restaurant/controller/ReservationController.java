@@ -1,8 +1,8 @@
 package com.orange.restaurant.controller;
 
 import com.orange.restaurant.model.Reservation;
-import com.orange.restaurant.model.dto.GetReservationsResponseDTO;
 import com.orange.restaurant.model.dto.ReservationRequest;
+import com.orange.restaurant.model.dto.ReservationResponseDTO;
 import com.orange.restaurant.model.dto.TimeRange;
 import com.orange.restaurant.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.reserve(request));
     }
     @PostMapping("/admin/reservations")
-    public ResponseEntity<List<GetReservationsResponseDTO>> getReservations(@RequestBody TimeRange timeRange){
-        List<GetReservationsResponseDTO> reservations = reservationService.findReservationsInSpecificDate(timeRange);
+    public ResponseEntity<List<ReservationResponseDTO>> getReservations(@RequestBody TimeRange timeRange){
+        List<ReservationResponseDTO> reservations = reservationService.findReservationsInSpecificDate(timeRange);
         return ResponseEntity.ok(reservations);
     }
 }

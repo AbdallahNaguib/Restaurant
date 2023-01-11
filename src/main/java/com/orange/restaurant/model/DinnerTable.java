@@ -22,6 +22,6 @@ public class DinnerTable {
     private String tableName;
     private short maxPersons;
 
-    @OneToMany(mappedBy = "table")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "table")
     private List<Reservation> reservations;
 }

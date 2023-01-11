@@ -1,0 +1,2 @@
+create "restaurant" database
+change database username and password in application.properties file
