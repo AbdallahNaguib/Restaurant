@@ -1,0 +1,42 @@
+package com.orange.restaurant.security;
+
+import com.orange.restaurant.Constants;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class SecurityConfiguration {
+
+  private final JwtRequestFilter jwtAuthFilter;
+  private final AuthenticationProvider authenticationProvider;
+  private final JwtRequestFilter jwtRequestFilter;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.csrf()
+            .disable()
+            .authorizeHttpRequests()
+            .requestMatchers("/api/auth/**")
+            .permitAll()
+            .requestMatchers("/api/admin/**")
+            .hasAuthority(Constants.ADMIN)
+            .anyRequest().authenticated().and().
+            exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and().sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+    // Add a filter to validate the tokens with every request
+    httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    return httpSecurity.build();
+  }
+}
