@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+//ToDo preferablly move your application config into a package --config
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {

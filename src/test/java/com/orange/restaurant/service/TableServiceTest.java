@@ -126,11 +126,21 @@ public class TableServiceTest {
                 .thenReturn(tables);
     }
 
+    //ToDo we prefer naming our tests with given_when_then
+    //givenTestPrecondtion_whenTestedAction_thenExpectedResult
+    //givenAvailableTablesExists_whenGetAvailableTables_thenOnlyAvailableTablesRetrieved
+    //Preferably don't test your service layer if there's no computation, instead do an offline integration test
+    //Checkout MVC tests with testcontainers for database mocking
     @Test
     public void testGetAvailableTables() {
         mockFindAllDinnerTables();
+        //ToDo a testcase should be readable, mockfindAll doesn't show what is the precondition
+        //How about you create a method to add a table with reservations and call it multiple times?
         // [1:10,20:30][8:13,17:25][9:17,22:29]
 
+        //ToDo you are exeucting the same tests multiple times, to check when available tables exist and no available tables
+        //a test case should have only one reason to fail, create a separate case to validate no available tests
+        // Also checkout data driven tests to execute the same test case with multiple values
         Assertions.assertEquals(tableService.getAvailableTables(TimeRange.builder()
                 .startTime(15L)
                 .endTime(16L)
@@ -153,6 +163,7 @@ public class TableServiceTest {
 
     @Test
     public void testCheckIfAvailable(){
+        //ToDo same as above
         DinnerTable t3 = DinnerTable.builder()
                 .tableName("t3")
                 .maxPersons((short) 10)

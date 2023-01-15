@@ -23,15 +23,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class AuthController {
+    //Controllers should only do data mapping
+    // then forward the execution to the service layer
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserService userDetailsService;
 
+    //ToDo do you know that this could be done by spring security out of the box?
     @PostMapping(value = "/auth/login")
     public ResponseEntity<?> login(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
+        //checkout using a token enhancer
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getEmail());
 
@@ -45,6 +49,7 @@ public class AuthController {
         return ResponseEntity.created(null).build();
     }
 
+    //ToDo registering an admin should require special priv
     @PostMapping(value = "/admin/register_admin")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody RegisterUserRequest user) {
         userDetailsService.createAdmin(user);

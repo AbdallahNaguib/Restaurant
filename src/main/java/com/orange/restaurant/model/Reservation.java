@@ -20,7 +20,10 @@ public class Reservation {
     private Long id;
 
     // the reservation times will be saved as long values
+    //ToDo why sava time as long?
     private Long startTime, endTime;
+
+    //ToDo who reserved this table? are you missing a field
 
     @ManyToOne(fetch = FetchType.LAZY)
     private DinnerTable table;

@@ -23,6 +23,8 @@ public class RestaurantApplication {
     }
     @Bean
     CommandLineRunner runSeed(TableRepository tableRepository, UserRepo userRepo) {
+        //ToDo you will seed your database once per run, this would lead to duplicate seed data in the database
+        // use database migration instead https://flywaydb.org/documentation/concepts/migrations.html
         return args -> {
             userRepo.save(User.builder()
                     .email("admin@gmail.com")

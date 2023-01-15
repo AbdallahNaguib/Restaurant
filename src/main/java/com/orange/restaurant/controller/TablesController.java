@@ -17,12 +17,13 @@ import java.util.List;
 @RequestMapping("/api")
 public class TablesController {
     private final TableService tableService;
-
+//ToDo remov the admin prefix, no need to use /create, when you set the http method to POST it's understood that you are doing a creation
     @PostMapping("/admin/tables/create")
     public ResponseEntity<DinnerTable> create(@Valid @RequestBody DinnerTableRequestDTO request) {
         return ResponseEntity.ok(tableService.save(request));
     }
 
+    //ToDo should be a get, filter should be in query param not body
     @PostMapping("/tables")
     public ResponseEntity<List<TableResponseDTO>> getAvailableTables(@RequestBody TimeRange timeRange) {
         return ResponseEntity.ok(tableService.getAvailableTables(timeRange));

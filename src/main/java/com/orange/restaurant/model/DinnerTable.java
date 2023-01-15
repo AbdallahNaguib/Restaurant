@@ -18,7 +18,7 @@ public class DinnerTable {
     @Id
     @GeneratedValue
     private Long id;
-
+//ToDo what is the size of the generated field? does it accomodate the limit set in the user story?
     private String tableName;
     private short maxPersons;
 

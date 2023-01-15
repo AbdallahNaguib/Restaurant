@@ -28,6 +28,9 @@ public class SecurityConfiguration {
             .authorizeHttpRequests()
             .requestMatchers("/api/auth/**")
             .permitAll()
+            //ToDo reource url shouldn't be used for authorization
+            // adding admin prefix pollutes the url,
+            // imagine if an api accepts both admin and non admin access
             .requestMatchers("/api/admin/**")
             .hasAuthority(Constants.ADMIN)
             .anyRequest().authenticated().and().

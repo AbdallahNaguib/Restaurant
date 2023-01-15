@@ -14,6 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+//ToDo map on the controller level, checkout mapStruct
 public class TableService implements ITableService {
     private final TableRepository tableRepository;
 
@@ -28,6 +29,10 @@ public class TableService implements ITableService {
 
     @Override
     public List<TableResponseDTO> getAvailableTables(TimeRange timeRange) {
+        //ToDo avoid findAll at all costs unless you're using a lookup table
+        // business table can grow overtime, (imagine opening a franchise, multi countrie, multi branches)
+        // executing a findAll would mean loadiing alot of data that is not needed
+        // also filtering on the database level decreases the overhead on the network and garbage collection for the unneeded entries
         List<DinnerTable> allTables = tableRepository.findAll();
         return allTables.stream().filter(table -> checkIfAvailable(table,timeRange))
                 .map(TableResponseDTO::mapFromEntity).toList();
@@ -35,12 +40,15 @@ public class TableService implements ITableService {
 
     @Override
     public List<TableResponseDTO> getAllTables() {
+        //ToDo If this is needed for viewing add a pagination to avoid retrieving all values at once
         return tableRepository.findAll().stream().map(TableResponseDTO::mapFromEntity).toList();
     }
 
     // checks if the table is available at the that time frame
     @Override
     public boolean checkIfAvailable(DinnerTable table, TimeRange timeRange) {
+        //ToDo imagine the system after running for one year, how many reservations per table?
+        //do you need to retrieve them all?
         if(table.getReservations() == null)return true;
         for (Reservation reservation : table.getReservations()) {
             boolean requestIsBeforeCurrentReservation = timeRange.getEndTime() <= reservation.getStartTime();

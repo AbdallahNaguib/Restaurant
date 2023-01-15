@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepo extends JpaRepository<Reservation, Long> {
+    //ToDo try using spring data derived query--> findByStartTimeGreaterThanEndTimeLessThan
     @Query(nativeQuery = true,value = "select reservations.* from reservations " +
             "where reservations.start_time >= :startTime and reservations.end_time <= :endTime")
     List<Reservation> findInSpecificDate(@Param("startTime") long startTime, @Param("endTime") long endTime);
